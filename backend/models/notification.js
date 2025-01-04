@@ -7,7 +7,7 @@ const notificationSchema = new mongoose.Schema({
     isRead: { type: Boolean, default: false },
 }, {
     timestamps: true,
-});
+}); 
 
 const Notification = mongoose.model('Notification', notificationSchema);
-export default Notification
+export default Notification;

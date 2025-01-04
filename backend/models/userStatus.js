@@ -21,4 +21,4 @@ const userStatusSchema = new mongoose.Schema({
 });
 
 const UserStatus = mongoose.model('UserStatus', userStatusSchema);
-export default UserStatus
+export default UserStatus;
