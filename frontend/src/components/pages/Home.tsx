@@ -1,23 +1,39 @@
+import { Avatar } from "@/components/ui/avatar";
+import {
+  MenuContent,
+  MenuItem,
+  MenuRoot,
+  MenuTrigger,
+} from "@/components/ui/menu";
 import { Box, Button, Flex, Input, Text } from "@chakra-ui/react";
-import { ColorModeButton } from "../ui/color-mode";
+import { FiMenu } from "react-icons/fi";
+import { useColorMode } from "../ui/color-mode";
+import { Link } from "react-router";
 
 const Home = () => {
+
+  const { colorMode, toggleColorMode } = useColorMode();
+
+
+
   return (
     <Box background={"gray.200"} _dark={{ background: "gray.950" }} width={"100vw"} height={"100vh"} overflow={"hidden"} >
+
       <Flex
         direction={"row"}
         maxW={"1200px"}
         width={"100%"}
         minH={"100vh"}
+        maxH={"100vh"}
+        height={"100vh"}
         margin={"0 auto"}
+        padding={"4"}
+        gap={"4"}
       >
+
         {/* Chats */}
         <Box
-          padding={"0"} 
-          sm={{ 
-            padding: "4", 
-            paddingRight: "0",
-          }}  
+          padding={"0"}
         >
           <Flex
             direction={"column"}
@@ -28,11 +44,6 @@ const Home = () => {
             borderRadius={"lg"}
             padding={"4"}
             paddingBlock={"1"}
-            sm={{ 
-              display: "flex",
-              minW: "70px", 
-              maxW: "70px"
-            }}
             md={{ 
               display: "flex",
               minW: "220px",
@@ -45,18 +56,36 @@ const Home = () => {
 
             }}
           >
-            <Text
-              fontSize={"lg"}
-              display={"none"}
-              fontWeight={"semibold"}
-              marginBottom={"10px"}
-              marginTop={"10px"}
-              md={{
-                display: "flex"
-              }}
-            >
-              Chats
-            </Text>
+            <Flex direction={"row"} align={"center"} gap={"10px"} transform={"translateX(-2px)"} >
+              <MenuRoot >
+                <MenuTrigger asChild>
+                  <Button variant={"ghost"} size="md" padding={0} h={"30px"} minWidth={"30px"} >
+                    <FiMenu />
+                  </Button>
+                </MenuTrigger>
+                <MenuContent>
+                  <MenuItem onClick={toggleColorMode} padding={4} cursor={"pointer"} value="dark-mode">Dark Mode: {colorMode === 'dark' ? 'On' : 'Off'}</MenuItem>
+                  <MenuItem padding={4} cursor={"pointer"} value="my-account">My Account</MenuItem>
+                  <Link to={"/auth/login"} >
+                    <MenuItem padding={4} cursor={"pointer"} borderTop={"1px solid"} borderColor={"gray.300"} _dark={{ borderColor: "gray.800" }} value="log-out">
+                      Log out
+                    </MenuItem>
+                  </Link>
+                </MenuContent>
+              </MenuRoot>
+              <Text
+                fontSize={"lg"}
+                display={"none"}
+                fontWeight={"semibold"}
+                marginBottom={"10px"}
+                marginTop={"10px"}
+                md={{
+                  display: "flex"
+                }}
+              >
+                Chats
+              </Text>
+            </Flex>
 
             <Flex 
               direction={"column"}
@@ -66,6 +95,7 @@ const Home = () => {
               }}
             >
               <Flex
+                cursor={"pointer"}
                 background={"transparent"}
                 fontSize={"14px"}
                 sm={{ 
@@ -74,13 +104,8 @@ const Home = () => {
                   paddingInline: "0",
                 }}
               >
-                <Box
-                  minH={"40px"}
-                  minW={"40px"}
-                  borderRadius={"full"}
-                  bg={"bg.inverted"}
-                  opacity={"10%"}
-                ></Box>
+                <Avatar name="Jinky Suson" src="" ></Avatar>
+
                 <Flex
                   direction={"column"}
                   textWrap={"nowrap"}
@@ -107,90 +132,7 @@ const Home = () => {
                   </Text>
                 </Flex>
               </Flex>
-              <Flex
-                background={"transparent"}
-                fontSize={"14px"}
-                sm={{ 
-                  gap: "3",
-                  padding: "3",
-                  paddingInline: "0",
-                }}
-              >
-                <Box
-                  minH={"40px"}
-                  minW={"40px"}
-                  borderRadius={"full"}
-                  bg={"bg.inverted"}
-                  opacity={"10%"}
-                ></Box>
-                <Flex
-                  direction={"column"}
-                  textWrap={"nowrap"}
-                  width={"0"}
-                  md={{ minWidth: "130px" }}
-                  lg={{ minWidth: "200px",  }}
-                >
-                  <Text 
-                    display={"none"}
-                    md={{ display: "flex" }}
-                  >User 2</Text>
-                  <Text 
-                    opacity={"50%"} 
-                    textOverflow={"ellipsis"}
-                    fontSize={"xs"}
-                    overflow={"hidden"}
-                    display={"none"}
-                    md={{ display: "block" }}
-                  >
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo
-                    et fugit praesentium aspernatur ex quia, rerum neque fugiat
-                    nisi quos ab repellendus laudantium iusto necessitatibus,
-                    cupiditate quae. Accusantium, nemo minus?
-                  </Text>
-                </Flex>
-              </Flex>
-              <Flex
-                background={"transparent"}
-                fontSize={"14px"}
-                sm={{ 
-                  gap: "3",
-                  padding: "3",
-                  paddingInline: "0",
-                }}
-              >
-                <Box
-                  minH={"40px"}
-                  minW={"40px"}
-                  borderRadius={"full"}
-                  bg={"bg.inverted"}
-                  opacity={"10%"}
-                ></Box>
-                <Flex
-                  direction={"column"}
-                  textWrap={"nowrap"}
-                  width={"0"}
-                  md={{ minWidth: "130px" }}
-                  lg={{ minWidth: "200px",  }}
-                >
-                  <Text 
-                    display={"none"}
-                    md={{ display: "flex" }}
-                  >User 3</Text>
-                  <Text 
-                    opacity={"50%"} 
-                    textOverflow={"ellipsis"}
-                    fontSize={"xs"}
-                    overflow={"hidden"}
-                    display={"none"}
-                    md={{ display: "block" }}
-                  >
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo
-                    et fugit praesentium aspernatur ex quia, rerum neque fugiat
-                    nisi quos ab repellendus laudantium iusto necessitatibus,
-                    cupiditate quae. Accusantium, nemo minus?
-                  </Text>
-                </Flex>
-              </Flex>
+          
             </Flex>
           </Flex>
         </Box>
@@ -198,14 +140,10 @@ const Home = () => {
         {/* Main */}
         <Flex
           width={"100%"}
-          height={"100vh"}
+          height={"100%"}
           direction={"column"}
           padding={"0"}
-
-          sm={{
-            padding: "4"
-          }}
-          >
+        >
           {/* Header */}
           <Flex
             direction={"column"}
@@ -222,23 +160,17 @@ const Home = () => {
                 paddingBlock={"3"}
               >
                 <Flex direction={"row"} gap={"10px"} width={"full"} >
-                  <Box
-                    h={"45px"}
-                    w={"45px"}
-                    borderRadius={"full"}
-                    bg={"bg.inverted"}
-                    opacity={"10%"}
-                  ></Box>
+                  <Avatar name="Jinky Suson" src="" ></Avatar>
                   <Flex direction={"column"}>
-                    <Text fontWeight={"semibold"} fontSize={"lg"} color={"fg"}>
-                      Jhon Doe
+                    <Text fontWeight={"semibold"} fontSize={"md"} color={"fg"}>
+                      Jinky Suson
                     </Text>
-                    <Text fontSize={"xs"} fontWeight={"200"} opacity={"70%"}>
+                    <Text fontSize={"xs"} fontWeight={"300"} opacity={"70%"}>
                       Active now
                     </Text>
                   </Flex>
                 </Flex>
-                <ColorModeButton _icon={{ w: "16px" }} />
+                {/* <ColorModeButton _icon={{ w: "16px" }} /> */}
               </Flex>
             </Flex>
 
