@@ -1,13 +1,10 @@
-import {  Button, Center, Heading, Input, Stack, Text, Group, Fieldset, Link as ChakraLink } from "@chakra-ui/react"
-import { Field } from "../ui/field"
+import { Flex, Button, Link as ChakraLink, Fieldset, Group, Heading, Input, Stack, Text } from "@chakra-ui/react"
+import { useState } from "react"
 import { Link } from "react-router"
-import { useEffect, useState } from "react"
-import { useColorMode } from "../ui/color-mode"
-import { Switch } from "@/components/ui/switch"
+import { ColorModeButton, useColorModeValue } from "../ui/color-mode"
+import { Field } from "../ui/field"
 
 const Register = () => {
-
-  const { colorMode, toggleColorMode } = useColorMode();
 
   const [ usernameError, setUsernameError ] = useState<string>()
   const [ firstnameError, setFirstnameError ] = useState<string>()
@@ -23,40 +20,95 @@ const Register = () => {
   //   setConfirmPasswordError("Passwords do not match")
   // }, [])
 
-  return (
-    <Center p={"10"} minH={"100vh"} w={"100vw"} bg={{ base: "gray.100", _dark: "gray.950" }} >
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
 
-      <Stack onClick={toggleColorMode} direction={"row"} align={"center"} position={"absolute"} top={4} right={4} cursor={"pointer"} >
-        <Text >Dark mode </Text>
-        <Switch checked={colorMode === 'dark'} ></Switch>
-      </Stack>
+    const { username, firstname, lastname, password, confirmPassword } = e.target as HTMLFormElement;
+
+    console.log(firstname)
+
+    const usernameValid = !!username.value;
+    const firstnameValid = !!firstname.value;
+    const lastnameValid = !!lastname.value;
+    const passwordValid = password.value.length >= 8;
+    const confirmPasswordValid = password.value === confirmPassword.value;
+
+    setUsernameError(usernameValid ? undefined : "Username is required");
+    setFirstnameError(firstnameValid ? undefined : "Firstname is required");
+    setLastnameError(lastnameValid? undefined : "Lastname is required");
+    setPasswordError(passwordValid ? undefined : "Password is invalid");
+    setConfirmPasswordError(confirmPasswordValid ? undefined : "Passwords do not match");
+
+    if (!usernameValid || !passwordValid || !firstnameValid || !lastnameValid || !passwordValid ) {
+      return;
+    }
+
+    const formData = {
+      username: username.value,
+      firstname: firstname.value,
+      lastname: lastname.value,
+      password: password.value,
+      confirmPassword: confirmPassword.value
+    }
+
+    console.log(formData)
+    
+  }
+
+  return (
+    <Flex 
+      padding={"0"} boxSizing={"border-box"}
+      paddingBottom={"10"}
+      alignItems={"center"}
+      bg={useColorModeValue("gray.100", "gray.950")} 
+      minH={"100vh"}
+      minW={"100vw"}
+      justifyContent={"center"}
+      height={"fit-content"}
+      sm={{
+        padding: 10
+      }}
+    >
 
       <Stack direction={"column"} gap={8} >
-        <form action="">
+        <form onSubmit={handleSubmit} >
           <Fieldset.Root>
-            <Stack bg={{ base: "white", _dark: "gray.900" }} border={"1px solid"} borderColor={"gray.200"} _dark={{ borderColor: "gray.800" }} padding={"10"} >
-                <Heading size={"2xl"} fontWeight={"extrabold"} >PotatoChat🥔</Heading>
+            <Stack 
+              border={"1px solid"}   
+              borderColor={useColorModeValue("gray.200", "gray.800")}
+              bg={useColorModeValue("white", "gray.900")} 
+              padding={"10"} 
+            >
+                <Stack direction={"row"} align={"center"} justifyContent={"space-between"} >
+                  <Heading textAlign={"center"} size={"2xl"} fontWeight={"extrabold"} >PotatoChat🥔</Heading>
+                  <ColorModeButton 
+                    _icon={{ width: "18px" }}
+                    _hover={{
+                      bg: useColorModeValue("gray.100", "gray.800")
+                    }} 
+                  />
+                </Stack>
                 <Text color={"gray.500"} lineHeight={1} >Create new account</Text>
                 
                 <Fieldset.Content>
-                  <Field required invalid={usernameError !== undefined} errorText={usernameError} >
-                    <Input p={"6"} w="80" mt={6} placeholder="Username" />
+                  <Field  invalid={usernameError !== undefined} errorText={usernameError} >
+                    <Input name="username" p={"6"} w="80" mt={6} placeholder="Username" />
                   </Field>
                   
-                  <Field required invalid={usernameError !== undefined} errorText={firstnameError} >
-                    <Input p={"6"} w="80" mt={1} placeholder="First name"  />
+                  <Field invalid={firstnameError !== undefined} errorText={firstnameError} >
+                    <Input name="firstname" p={"6"} w="80" mt={1} placeholder="First name"  />
                   </Field>
 
-                  <Field required invalid={usernameError !== undefined} errorText={lastnameError} >
-                    <Input p={"6"} w="80" mt={1} placeholder="Last name"  />
+                  <Field invalid={lastnameError !== undefined} errorText={lastnameError} >
+                    <Input name="lastname" p={"6"} w="80" mt={1} placeholder="Last name"  />
                   </Field>
 
-                  <Field required invalid={usernameError !== undefined} errorText={passwordError} >
-                    <Input p={"6"} w="80" mt={1} placeholder="Password"  />
+                  <Field invalid={passwordError !== undefined} errorText={passwordError} helperText={"Password must be atleast 8 characters long"} >
+                    <Input name="password" p={"6"} w="80" mt={1} placeholder="Password"  />
                   </Field>
                   
-                  <Field required invalid={usernameError !== undefined} errorText={confirmPasswordError} >
-                    <Input p={"6"} w="80" mt={1} placeholder="Confirm Password"  />
+                  <Field invalid={confirmPasswordError !== undefined} errorText={confirmPasswordError} >
+                    <Input name="confirmPassword" p={"6"} w="80" mt={1} placeholder="Confirm Password"  />
                   </Field>
                 </Fieldset.Content>
 
@@ -71,7 +123,7 @@ const Register = () => {
           </ChakraLink>
         </Group>
       </Stack>
-    </Center>
+    </Flex>
   )
 }
 

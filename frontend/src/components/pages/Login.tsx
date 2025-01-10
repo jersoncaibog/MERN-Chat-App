@@ -1,9 +1,9 @@
-import {  Button, Center, Heading, Input, Stack, Text, Group, Fieldset, Link as ChakraLink } from "@chakra-ui/react"
-import { Checkbox } from "../ui/checkbox"
-import { Field } from "../ui/field"
+import { Button, Link as ChakraLink, Fieldset, Flex, Group, Heading, Input, Stack, Text } from "@chakra-ui/react"
+import { useState } from "react"
 import { Link } from "react-router"
-import { useEffect, useState } from "react"
-import { ColorModeButton } from "../ui/color-mode"
+import { Checkbox } from "../ui/checkbox"
+import { ColorModeButton, useColorModeValue } from "../ui/color-mode"
+import { Field } from "../ui/field"
 
 const Login = () => {
 
@@ -35,13 +35,37 @@ const Login = () => {
   }
 
   return (
-    <Center h={"100vh"} w={"100vw"} bg={{ base: "gray.100", _dark: "gray.950" }} >
-      <ColorModeButton position={"absolute"} top={5} right={5} />
+    <Flex 
+      padding={"0"} boxSizing={"border-box"}
+      paddingBottom={"10"}
+      alignItems={"center"}
+      bg={useColorModeValue("gray.100", "gray.950")} 
+      minH={"100vh"}
+      minW={"100vw"}
+      justifyContent={"center"}
+      height={"fit-content"}
+      sm={{
+        padding: 10
+      }}
+    >
       <Stack direction={"column"} gap={8} >
         <form onSubmit={handleSubmit}>
           <Fieldset.Root>
-            <Stack bg={{ base: "white", _dark: "gray.900" }} border={"1px solid"} borderColor={"gray.200"} _dark={{ borderColor: "gray.800" }} padding={"10"} >
-                <Heading textAlign={"center"} size={"2xl"} fontWeight={"extrabold"} >PotatoChat🥔</Heading>
+            <Stack 
+              border={"1px solid"}   
+              borderColor={useColorModeValue("gray.200", "gray.800")}
+              bg={useColorModeValue("white", "gray.900")} 
+              padding={"10"} 
+            >
+                <Stack direction={"row"} align={"center"} justifyContent={"space-between"} >
+                  <Heading textAlign={"center"} size={"2xl"} fontWeight={"extrabold"} >PotatoChat🥔</Heading>
+                  <ColorModeButton 
+                    _icon={{ width: "18px" }}
+                    _hover={{
+                      bg: useColorModeValue("gray.100", "gray.800")
+                    }} 
+                  />
+                </Stack>
 
                 <Fieldset.Content>
                   <Field invalid={usernameError !== undefined} errorText={usernameError} >
@@ -69,7 +93,7 @@ const Login = () => {
           </ChakraLink>
         </Group>
       </Stack>
-    </Center>
+    </Flex>
   )
 }
 

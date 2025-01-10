@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/menu";
 import { Box, Button, Flex, Input, Text } from "@chakra-ui/react";
 import { FiMenu } from "react-icons/fi";
-import { useColorMode } from "../ui/color-mode";
+import { useColorMode, useColorModeValue } from "../ui/color-mode";
 import { Link } from "react-router";
 
 const Home = () => {
@@ -17,7 +17,7 @@ const Home = () => {
 
 
   return (
-    <Box background={"gray.200"} _dark={{ background: "gray.950" }} width={"100vw"} height={"100vh"} overflow={"hidden"} >
+    <Box bg={useColorModeValue("gray.200", "gray.950")} width={"100vw"} height={"100vh"} overflow={"hidden"} >
 
       <Flex
         direction={"row"}
@@ -40,7 +40,7 @@ const Home = () => {
             display={"none"}
             minW={"0px"}
             height={"100%"}
-            bg={{ base: "white", _dark: "gray.900" }}
+            bg={useColorModeValue("white", "gray.900")}
             borderRadius={"lg"}
             padding={"4"}
             paddingBlock={"1"}
@@ -67,7 +67,7 @@ const Home = () => {
                   <MenuItem onClick={toggleColorMode} padding={4} cursor={"pointer"} value="dark-mode">Dark Mode: {colorMode === 'dark' ? 'On' : 'Off'}</MenuItem>
                   <MenuItem padding={4} cursor={"pointer"} value="my-account">My Account</MenuItem>
                   <Link to={"/auth/login"} >
-                    <MenuItem padding={4} cursor={"pointer"} borderTop={"1px solid"} borderColor={"gray.300"} _dark={{ borderColor: "gray.800" }} value="log-out">
+                    <MenuItem padding={4} cursor={"pointer"} borderTop={"1px solid"} borderColor={useColorModeValue("gray.300", "gray.800")} value="log-out">
                       Log out
                     </MenuItem>
                   </Link>
@@ -148,7 +148,7 @@ const Home = () => {
           <Flex
             direction={"column"}
             height={"100%"}
-            bg={{ base: "white", _dark: "gray.900" }}
+            bg={useColorModeValue("white", "gray.900")}
             borderRadius={"lg"}
           >
             <Flex width={"full"} direction={"column"} alignItems={"center"}>
@@ -208,7 +208,7 @@ const Home = () => {
                 width={"fit-content"}
                 maxWidth={"240px"}
                 borderRadius={"md"}
-                bg={{ base: "gray.100", _dark: "gray.800" }} 
+                bg={useColorModeValue("gray.100", "gray.800")} 
 
                 sm={{ maxWidth: "360px" }}
                 md={{ maxWidth: "400px" }}
@@ -222,50 +222,7 @@ const Home = () => {
                 width={"fit-content"}
                 maxWidth={"240px"}
                 borderRadius={"md"}
-                bg={{ base: "gray.100", _dark: "gray.800" }} 
-
-                sm={{ maxWidth: "360px" }}
-                md={{ maxWidth: "400px" }}
-                lg={{ maxWidth: "550px" }}
-              >
-                <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat ut ab nulla sapiente exercitationem obcaecati nemo accusantium quasi facilis non?</Text>
-              </Flex>
-
-              <Flex 
-                padding={"2"}
-                width={"fit-content"}
-                maxWidth={"240px"}
-                borderRadius={"md"}
-                marginLeft={"auto"}
-                bg={{ base: "gray.200", _dark: "gray.700" }} 
-
-                sm={{ maxWidth: "360px" }}
-                md={{ maxWidth: "400px" }}
-                lg={{ maxWidth: "550px" }}
-              >
-                <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat ut ab nulla sapiente exercitationem obcaecati nemo accusantium quasi facilis non?</Text>
-              </Flex>
-
-              <Flex 
-                padding={"2"}
-                width={"fit-content"}
-                maxWidth={"240px"}
-                borderRadius={"md"}
-                bg={{ base: "gray.100", _dark: "gray.800" }} 
-
-                sm={{ maxWidth: "360px" }}
-                md={{ maxWidth: "400px" }}
-                lg={{ maxWidth: "550px" }}
-              >
-                <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat ut ab nulla sapiente exercitationem obcaecati nemo accusantium quasi facilis non?</Text>
-              </Flex>
-
-              <Flex 
-                padding={"2"}
-                width={"fit-content"}
-                maxWidth={"240px"}
-                borderRadius={"md"}
-                bg={{ base: "gray.100", _dark: "gray.800" }} 
+                bg={useColorModeValue("gray.100", "gray.800")} 
 
                 sm={{ maxWidth: "360px" }}
                 md={{ maxWidth: "400px" }}
@@ -280,7 +237,7 @@ const Home = () => {
                 maxWidth={"240px"}
                 borderRadius={"md"}
                 marginLeft={"auto"}
-                bg={{ base: "gray.200", _dark: "gray.700" }} 
+                bg={useColorModeValue("200", "gray.700")} 
 
                 sm={{ maxWidth: "360px" }}
                 md={{ maxWidth: "400px" }}
@@ -294,7 +251,7 @@ const Home = () => {
                 width={"fit-content"}
                 maxWidth={"240px"}
                 borderRadius={"md"}
-                bg={{ base: "gray.100", _dark: "gray.800" }} 
+                bg={useColorModeValue("gray.100", "gray.800")} 
 
                 sm={{ maxWidth: "360px" }}
                 md={{ maxWidth: "400px" }}
@@ -308,7 +265,7 @@ const Home = () => {
                 width={"fit-content"}
                 maxWidth={"240px"}
                 borderRadius={"md"}
-                bg={{ base: "gray.100", _dark: "gray.800" }} 
+                bg={useColorModeValue("gray.100", "gray.800")} 
 
                 sm={{ maxWidth: "360px" }}
                 md={{ maxWidth: "400px" }}
@@ -323,7 +280,50 @@ const Home = () => {
                 maxWidth={"240px"}
                 borderRadius={"md"}
                 marginLeft={"auto"}
-                bg={{ base: "gray.200", _dark: "gray.700" }} 
+                bg={useColorModeValue("gray.200", "gray.700")} 
+
+                sm={{ maxWidth: "360px" }}
+                md={{ maxWidth: "400px" }}
+                lg={{ maxWidth: "550px" }}
+              >
+                <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat ut ab nulla sapiente exercitationem obcaecati nemo accusantium quasi facilis non?</Text>
+              </Flex>
+
+              <Flex 
+                padding={"2"}
+                width={"fit-content"}
+                maxWidth={"240px"}
+                borderRadius={"md"}
+                bg={useColorModeValue("gray.100", "gray.800")} 
+
+                sm={{ maxWidth: "360px" }}
+                md={{ maxWidth: "400px" }}
+                lg={{ maxWidth: "550px" }}
+              >
+                <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat ut ab nulla sapiente exercitationem obcaecati nemo accusantium quasi facilis non?</Text>
+              </Flex>
+
+              <Flex 
+                padding={"2"}
+                width={"fit-content"}
+                maxWidth={"240px"}
+                borderRadius={"md"}
+                bg={useColorModeValue("gray.100", "gray.800")} 
+
+                sm={{ maxWidth: "360px" }}
+                md={{ maxWidth: "400px" }}
+                lg={{ maxWidth: "550px" }}
+              >
+                <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat ut ab nulla sapiente exercitationem obcaecati nemo accusantium quasi facilis non?</Text>
+              </Flex>
+
+              <Flex 
+                padding={"2"}
+                width={"fit-content"}
+                maxWidth={"240px"}
+                borderRadius={"md"}
+                marginLeft={"auto"}
+                bg={useColorModeValue("gray.200", "gray.700")} 
 
                 sm={{ maxWidth: "360px" }}
                 md={{ maxWidth: "400px" }}

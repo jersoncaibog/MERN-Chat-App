@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { createChatRoom, deleteChatRoom, fetchChatRoom, updateChatRoom } from '../controllers/chatroom.controller.js';
+import { createChatRoom, deleteChatRoom, fetchChatRoom, updateChatRoom } from '../controllers/chatRoom.controller.js';
 
 const router = express.Router();
 
