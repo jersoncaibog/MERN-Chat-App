@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import User from "../models/user.model.js";
-
+import { createAccessToken, createRefreshToken, verifyRefreshToken } from "../utils/authTokenUtils.js";
+ 
 export const createUser = async (req, res) => {
     const data = req.body
 
@@ -8,19 +9,29 @@ export const createUser = async (req, res) => {
         return res.status(400).json({ success: false, message: 'All fields are required' });
     }
 
-    if (await User.findOne({ username: data.username })) {
-        return res.status(400).json({ success: false, message: 'Username already exists' });
-    }
-
-    const newUser = new User(data);
-
     try {
+        if (await User.findOne({ username: data.username })) {
+            return res.status(400).json({ success: false, message: 'Username already taken' });
+        }
+        
+        // save to database
+        const newUser = new User(data);
+        
         await newUser.save();
         console.log('User created');
 
-        
+        // create tokens
+        const accessToken = createAccessToken(newUser);
+        const refreshToken = createRefreshToken(newUser);
 
-        res.status(201).json({ success: true, data: newUser });
+        // Set refresh token as HTTP-only cookie
+        res.cookie('refreshToken', refreshToken, { 
+            httpOnly: true, 
+            secure: process.env.NODE_ENV === 'production', 
+            sameSite: 'strict'
+        });
+
+        res.status(201).json({ success: true, message: 'User created', accessToken: accessToken, data: newUser });
     } catch (error) {
         console.error("Server error while creating user: ", error);
         res.status(500).json({ success: false, message: "server error" });
@@ -42,7 +53,18 @@ export const fetchUser = async (req, res) => {
             return res.status(404).json({ success: false, message: "User not found" });
         }
 
-        res.status(200).json({ success: true, data: fetchedUser });
+        // create tokens
+        const accessToken = createAccessToken(newUser);
+        const refreshToken = createRefreshToken(newUser);
+
+        // Set refresh token as HTTP-only cookie
+        res.cookie('refreshToken', refreshToken, { 
+            httpOnly: true, 
+            secure: process.env.NODE_ENV === 'production', 
+            sameSite: 'strict' 
+        });
+    
+        res.status(201).json({ success: true, message: 'Login successful', accessToken: accessToken, data: fetchedUser });
     } catch (error) {
         console.error("Server error while fetching user: ", error)
         res.status(500).json({ success: false, message: "server error" });
@@ -93,3 +115,29 @@ export const deleteUser = async (req, res) => {
         res.status(500).json({ success: false, message: "server error" });
     }
 }
+
+export const refreshAccessToken = (req, res) => {
+    const { refreshToken } = req.cookies;
+
+  if (!refreshToken) {
+    return res.status(401).json({ message: 'Refresh token missing' });
+  }
+
+  try {
+    const decoded = verifyRefreshToken(refreshToken);
+    const user = decoded; // Get user data
+    const newAccessToken = createAccessToken(user);
+    res.status(200).json({ accessToken: newAccessToken });
+  } catch (err) {
+    return res.status(403).json({ success: false, message: 'Invalid or expired refresh token' });
+  }
+};
+
+export const logoutUser = (req, res) => {
+    res.clearCookie('refreshToken', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'Strict',
+    });
+    res.status(200).json({ success: true, message: 'Logged out successfully' });
+};

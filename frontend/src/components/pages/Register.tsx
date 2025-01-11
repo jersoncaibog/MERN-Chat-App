@@ -1,13 +1,20 @@
 import { Flex, Button, Link as ChakraLink, Fieldset, Group, Heading, Input, Stack, Text } from "@chakra-ui/react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router"
 import { ColorModeButton, useColorModeValue } from "../ui/color-mode"
 import { Field } from "../ui/field"
 import { Toaster, toaster } from "@/components/ui/toaster"
+import useAuthStore from "@/stores/useAuthStore"
 
 const Register = () => {
   
   const navigate = useNavigate();
+  const { accessToken } = useAuthStore()
+  const setAccessToken = useAuthStore((state) => state.setAccessToken)
+
+  useEffect(() => {
+    console.log(accessToken)
+  }, [accessToken])
 
   const [ usernameError, setUsernameError ] = useState<string>()
   const [ firstnameError, setFirstnameError ] = useState<string>()
@@ -41,8 +48,7 @@ const Register = () => {
     setPasswordError(passwordValid ? undefined : "Password is invalid");
     setConfirmPasswordError(confirmPasswordValid ? undefined : "Passwords do not match");    
 
-    // check if empty
-    if (!usernameValid || !passwordValid || !firstnameValid || !lastnameValid || !passwordValid ) {
+    if (!usernameValid || !passwordValid || !firstnameValid || !lastnameValid || !passwordValid || !confirmPasswordValid ) {
       return;
     }
     
@@ -55,8 +61,8 @@ const Register = () => {
       confirmPassword: confirmPassword.value
     }
 
-    // fetch API for creating new user account
-    const createUser = fetch("/api/users", {
+    // POST API for creating new user account
+    const createUser = fetch("/api/auth", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData)
@@ -70,8 +76,18 @@ const Register = () => {
         throw new Error(error.message)
       }
 
-      console.log("User created successfully")
+      console.log("User account sucessfully created")
       return res.json();
+
+    }).then((res) => {
+
+      // setAccessToken()
+      setAccessToken(res.accessToken)
+
+      // Redirect user to home page
+      setTimeout(() => {
+        navigate("/", { replace: true });
+      }, 3000);
     })
 
     // create toaster
@@ -91,15 +107,6 @@ const Register = () => {
         description: "Please wait while we are creating your account.",
       }
     })
-
-    // TODO: Create auth token
-    
-
-    // Redirect user to home page
-    setTimeout(() => {
-      navigate("/");
-    }, 3000);
-
   }
 
   return (

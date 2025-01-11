@@ -8,13 +8,24 @@ import {
 import { Box, Button, Flex, Input, Text } from "@chakra-ui/react";
 import { FiMenu } from "react-icons/fi";
 import { useColorMode, useColorModeValue } from "../ui/color-mode";
-import { Link } from "react-router";
+import { useLogout } from "@/utils/auth";
+import useAuthStore from "@/stores/useAuthStore";
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
 
 const Home = () => {
 
+  const navigate = useNavigate();
   const { colorMode, toggleColorMode } = useColorMode();
-
-
+  const handleLogout = useLogout();
+  const { accessToken } = useAuthStore.getState();
+ 
+  useEffect(() => {
+    if (!accessToken) {
+      navigate("/auth/login");
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accessToken])
 
   return (
     <Box bg={useColorModeValue("gray.200", "gray.950")} width={"100vw"} height={"100vh"} overflow={"hidden"} >
@@ -66,11 +77,9 @@ const Home = () => {
                 <MenuContent>
                   <MenuItem onClick={toggleColorMode} padding={4} cursor={"pointer"} value="dark-mode">Dark Mode: {colorMode === 'dark' ? 'On' : 'Off'}</MenuItem>
                   <MenuItem padding={4} cursor={"pointer"} value="my-account">My Account</MenuItem>
-                  <Link to={"/auth/login"} >
-                    <MenuItem padding={4} cursor={"pointer"} borderTop={"1px solid"} borderColor={useColorModeValue("gray.300", "gray.800")} value="log-out">
-                      Log out
-                    </MenuItem>
-                  </Link>
+                  <MenuItem onClick={handleLogout} padding={4} cursor={"pointer"} borderTop={"1px solid"} borderColor={useColorModeValue("gray.300", "gray.800")} value="log-out">
+                    Log out
+                  </MenuItem>
                 </MenuContent>
               </MenuRoot>
               <Text
