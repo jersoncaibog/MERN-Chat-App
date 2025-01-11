@@ -1,18 +1,25 @@
-import User from "../models/user.model.js"
-import mongoose from "mongoose"
+import mongoose from "mongoose";
+import User from "../models/user.model.js";
 
 export const createUser = async (req, res) => {
-    const { username, firstName, lastName, password } = req.body
+    const data = req.body
 
-    if ( !username || !firstName || !lastName || !password ) {
+    if ( !data.username || !data.firstname || !data.lastname || !data.password  ) {
         return res.status(400).json({ success: false, message: 'All fields are required' });
     }
 
-    const newUser = new User(username, firstName, lastName, password);
+    if (await User.findOne({ username: data.username })) {
+        return res.status(400).json({ success: false, message: 'Username already exists' });
+    }
+
+    const newUser = new User(data);
 
     try {
         await newUser.save();
         console.log('User created');
+
+        
+
         res.status(201).json({ success: true, data: newUser });
     } catch (error) {
         console.error("Server error while creating user: ", error);
@@ -22,7 +29,7 @@ export const createUser = async (req, res) => {
 
 export const fetchUser = async (req, res) => {
     const { id } = req.params;
-
+    
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(404).json({ success: false, message: "Invalid user Id" });
     }

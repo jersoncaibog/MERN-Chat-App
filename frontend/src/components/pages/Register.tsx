@@ -1,10 +1,13 @@
 import { Flex, Button, Link as ChakraLink, Fieldset, Group, Heading, Input, Stack, Text } from "@chakra-ui/react"
 import { useState } from "react"
-import { Link } from "react-router"
+import { Link, useNavigate } from "react-router"
 import { ColorModeButton, useColorModeValue } from "../ui/color-mode"
 import { Field } from "../ui/field"
+import { Toaster, toaster } from "@/components/ui/toaster"
 
 const Register = () => {
+  
+  const navigate = useNavigate();
 
   const [ usernameError, setUsernameError ] = useState<string>()
   const [ firstnameError, setFirstnameError ] = useState<string>()
@@ -20,29 +23,30 @@ const Register = () => {
   //   setConfirmPasswordError("Passwords do not match")
   // }, [])
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     const { username, firstname, lastname, password, confirmPassword } = e.target as HTMLFormElement;
 
-    console.log(firstname)
-
+    // validate inputs
     const usernameValid = !!username.value;
     const firstnameValid = !!firstname.value;
     const lastnameValid = !!lastname.value;
     const passwordValid = password.value.length >= 8;
     const confirmPasswordValid = password.value === confirmPassword.value;
-
+    
     setUsernameError(usernameValid ? undefined : "Username is required");
     setFirstnameError(firstnameValid ? undefined : "Firstname is required");
     setLastnameError(lastnameValid? undefined : "Lastname is required");
     setPasswordError(passwordValid ? undefined : "Password is invalid");
-    setConfirmPasswordError(confirmPasswordValid ? undefined : "Passwords do not match");
+    setConfirmPasswordError(confirmPasswordValid ? undefined : "Passwords do not match");    
 
+    // check if empty
     if (!usernameValid || !passwordValid || !firstnameValid || !lastnameValid || !passwordValid ) {
       return;
     }
-
+    
+    // Save user data to database
     const formData = {
       username: username.value,
       firstname: firstname.value,
@@ -51,8 +55,51 @@ const Register = () => {
       confirmPassword: confirmPassword.value
     }
 
-    console.log(formData)
+    // fetch API for creating new user account
+    const createUser = fetch("/api/users", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData)
+    }).then(async (res) => {
+
+      if (!res.ok) {
+        const error = await res.json();
+
+        console.error('Error: ', error.message, ", Status: ", res.status);
+        setUsernameError("Username is already taken");
+        throw new Error(error.message)
+      }
+
+      console.log("User created successfully")
+      return res.json();
+    })
+
+    // create toaster
+    toaster.promise(createUser, {
+      success: {
+        title: "Account created successfully",
+        description: "Redirecting you to the home page now.",
+        duration: 5000
+      },
+      error: {
+        title: "Error creating account",
+        description: "Please try again.",
+        duration: 5000,
+      },
+      loading: {
+        title: "Creating account....",
+        description: "Please wait while we are creating your account.",
+      }
+    })
+
+    // TODO: Create auth token
     
+
+    // Redirect user to home page
+    setTimeout(() => {
+      navigate("/");
+    }, 3000);
+
   }
 
   return (
@@ -69,7 +116,7 @@ const Register = () => {
         padding: 10
       }}
     >
-
+      <Toaster />
       <Stack direction={"column"} gap={8} >
         <form onSubmit={handleSubmit} >
           <Fieldset.Root>
