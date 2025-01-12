@@ -5,6 +5,9 @@ import api from './api';
 export const refreshAccessToken = async () => {
   try {
     const response = await axios.post('/api/auth/refresh-token');
+
+    console.log(response)
+
     const newAccessToken = response.data.accessToken;
 
     useAuthStore.getState().setAccessToken(newAccessToken);

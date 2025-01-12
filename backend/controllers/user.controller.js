@@ -158,6 +158,7 @@ export const refreshAccessToken = (req, res) => {
   try {
     const decoded = verifyRefreshToken(refreshToken);
     const user = decoded; // Get user data
+    console.log(user)
     const newAccessToken = createAccessToken(user);
     res.status(200).json({ accessToken: newAccessToken });
   } catch (err) {

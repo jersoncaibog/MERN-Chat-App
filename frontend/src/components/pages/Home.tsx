@@ -22,6 +22,7 @@ const Home = () => {
  
   useEffect(() => {
     if (!accessToken) {
+      console.log("Access denied")
       navigate("/auth/login");
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -6,6 +6,9 @@ import { Field } from "../ui/field"
 import { Toaster, toaster } from "@/components/ui/toaster"
 import useAuthStore from "@/stores/useAuthStore"
 import axios from "axios"
+import {
+  PasswordInput,
+} from "@/components/ui/password-input"
 
 const Register = () => {
   
@@ -26,8 +29,9 @@ const Register = () => {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
+    
     const { username, firstname, lastname, password, confirmPassword } = e.target as HTMLFormElement;
-
+    
     // validate inputs
     const usernameValid = !!username.value;
     const firstnameValid = !!firstname.value;
@@ -38,13 +42,13 @@ const Register = () => {
     setUsernameError(usernameValid ? undefined : "Username is required");
     setFirstnameError(firstnameValid ? undefined : "Firstname is required");
     setLastnameError(lastnameValid? undefined : "Lastname is required");
-    setPasswordError(passwordValid ? undefined : "Password is invalid");
+    setPasswordError(passwordValid ? undefined : "Password too short");
     setConfirmPasswordError(confirmPasswordValid ? undefined : "Passwords do not match");    
-
+    
     if (!usernameValid || !passwordValid || !firstnameValid || !lastnameValid || !passwordValid || !confirmPasswordValid ) {
       return;
     }
-    
+
     // Save user data to database
     const formData = {
       username: username.value,
@@ -119,14 +123,15 @@ const Register = () => {
       }}
     >
       <Toaster />
-      <Stack direction={"column"} gap={8} >
+      <Stack direction={"column"} gap={8} w={"full"} maxW={"460px"} >
         <form onSubmit={handleSubmit} >
           <Fieldset.Root>
             <Stack 
               border={"1px solid"}   
               borderColor={useColorModeValue("gray.200", "gray.800")}
               bg={useColorModeValue("white", "gray.900")} 
-              padding={"10"} 
+              padding={"10"}
+              w={"full"} 
             >
                 <Stack direction={"row"} align={"center"} justifyContent={"space-between"} >
                   <Heading textAlign={"center"} size={"2xl"} fontWeight={"extrabold"} >PotatoChat🥔</Heading>
@@ -137,27 +142,27 @@ const Register = () => {
                     }} 
                   />
                 </Stack>
-                <Text color={"gray.500"} lineHeight={1} >Create new account</Text>
+                <Text color={"gray.500"} lineHeight={1} >Create your account to get started!</Text>
                 
                 <Fieldset.Content>
                   <Field  invalid={usernameError !== undefined} errorText={usernameError} >
-                    <Input name="username" p={"6"} w="80" mt={6} placeholder="Username" />
+                    <Input autoComplete="off" name="username" p={"6"} mt={6} placeholder="Username" />
                   </Field>
                   
                   <Field invalid={firstnameError !== undefined} errorText={firstnameError} >
-                    <Input name="firstname" p={"6"} w="80" mt={1} placeholder="First name"  />
+                    <Input autoComplete="off" name="firstname" p={"6"} mt={1} placeholder="First name"  />
                   </Field>
 
                   <Field invalid={lastnameError !== undefined} errorText={lastnameError} >
-                    <Input name="lastname" p={"6"} w="80" mt={1} placeholder="Last name"  />
+                    <Input autoComplete="off" name="lastname" p={"6"} mt={1} placeholder="Last name"  />
                   </Field>
 
                   <Field invalid={passwordError !== undefined} errorText={passwordError} helperText={"Password must be atleast 8 characters long"} >
-                    <Input name="password" p={"6"} w="80" mt={1} placeholder="Password"  />
+                    <PasswordInput name="password" p={"6"} mt={1} placeholder="Password" />
                   </Field>
                   
                   <Field invalid={confirmPasswordError !== undefined} errorText={confirmPasswordError} >
-                    <Input name="confirmPassword" p={"6"} w="80" mt={1} placeholder="Confirm Password"  />
+                    <PasswordInput name="confirmPassword" p={"6"} mt={1} placeholder="Confirm Password"  />
                   </Field>
                 </Fieldset.Content>
 
