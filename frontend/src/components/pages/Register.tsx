@@ -5,6 +5,7 @@ import { ColorModeButton, useColorModeValue } from "../ui/color-mode"
 import { Field } from "../ui/field"
 import { Toaster, toaster } from "@/components/ui/toaster"
 import useAuthStore from "@/stores/useAuthStore"
+import axios from "axios"
 
 const Register = () => {
   
@@ -21,14 +22,6 @@ const Register = () => {
   const [ lastnameError, setLastnameError ] = useState<string>()
   const [ passwordError, setPasswordError ] = useState<string>()
   const [ confirmPasswordError, setConfirmPasswordError ] = useState<string>()
-  
-  // useEffect(() => {
-  //   setUsernameError("Invalid username")
-  //   setFirstnameError("Invalid firstname")
-  //   setLastnameError("Invalid lastname")
-  //   setPasswordError("Password must be at least 8 characters")
-  //   setConfirmPasswordError("Passwords do not match")
-  // }, [])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -62,33 +55,35 @@ const Register = () => {
     }
 
     // POST API for creating new user account
-    const createUser = fetch("/api/auth", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData)
-    }).then(async (res) => {
+    const createUser = async () => {
+      try {
+        const response = await axios.post('/api/auth', formData, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+    
+        console.log("User account successfully created");
+        setAccessToken(response.data.accessToken);
+    
+        // Redirect user to home page
+        setTimeout(() => {
+          navigate("/", { replace: true });
+        }, 3000);
+    
+      } catch (error) {
+        // Type the error as AxiosError
+        if (axios.isAxiosError(error)) {
+          console.error('Error:', error.response?.data.message, ", Status:", error.response?.status);
+          setUsernameError("Username is already taken");
+        } else {
+          // Non-Axios error (e.g., network error)
+          console.error('Error:', error);
+        }
 
-      if (!res.ok) {
-        const error = await res.json();
-
-        console.error('Error: ', error.message, ", Status: ", res.status);
-        setUsernameError("Username is already taken");
-        throw new Error(error.message)
+        throw new Error(`Error creating user account: ${error}`);
       }
-
-      console.log("User account sucessfully created")
-      return res.json();
-
-    }).then((res) => {
-
-      // setAccessToken()
-      setAccessToken(res.accessToken)
-
-      // Redirect user to home page
-      setTimeout(() => {
-        navigate("/", { replace: true });
-      }, 3000);
-    })
+    };
 
     // create toaster
     toaster.promise(createUser, {

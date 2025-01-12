@@ -1,21 +1,27 @@
 import { Button, Link as ChakraLink, Fieldset, Flex, Group, Heading, Input, Stack, Text } from "@chakra-ui/react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Link } from "react-router"
 import { Checkbox } from "../ui/checkbox"
 import { ColorModeButton, useColorModeValue } from "../ui/color-mode"
 import { Field } from "../ui/field"
+import axios from "axios"
+import { useNavigate } from "react-router"
+import useAuthStore from "@/stores/useAuthStore"
 
 const Login = () => {
+
+  const navigate = useNavigate();
+  const { accessToken } = useAuthStore()
+  const setAccessToken = useAuthStore((state) => state.setAccessToken)
+
+  useEffect(() => {
+    console.log(accessToken)
+  }, [accessToken])
 
   const [ usernameError, setUsernameError ] = useState<string | undefined >()
   const [ passwordError, setPasswordError ] = useState<string | undefined >()
 
-  // useEffect(() => {
-  //   setUsernameError("Invalid username")
-  //   setPasswordError("Wrong password")
-  // }, [])
-
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     const { username, password } = e.target as HTMLFormElement;
@@ -30,8 +36,17 @@ const Login = () => {
       return;
     }
 
-    console.log("submit")
-  
+    try {
+      const response = await axios.post(`/api/auth/login`, { 
+        username: username.value, 
+        password: password.value
+      });
+      console.log(response);
+      setAccessToken(response.data.accessToken)
+      navigate(`/`);
+    } catch (error) {
+      console.error('Error: ', error);
+    }
   }
 
   return (
