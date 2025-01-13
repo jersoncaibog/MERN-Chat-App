@@ -1,6 +1,7 @@
 import axios from 'axios';
 import useAuthStore from '../stores/useAuthStore';
 import api from './api';
+import { useNavigate } from 'react-router';
 
 export const refreshAccessToken = async () => {
   try {
@@ -21,11 +22,13 @@ export const refreshAccessToken = async () => {
 
 export const useLogout = () => {
   const { clearAccessToken } = useAuthStore();
+  const navigate = useNavigate()
 
   const handleLogout = async () => {
     try {
       await api.post('/auth/logout', {}, { withCredentials: true });
       clearAccessToken(); // Clear state on logout
+      navigate("/auth/login")
     } catch (error) {
       console.error('Error logging out:', error);
     }

@@ -1,36 +1,47 @@
-import { Avatar } from "@/components/ui/avatar";
-import {
-  MenuContent,
-  MenuItem,
-  MenuRoot,
-  MenuTrigger,
-} from "@/components/ui/menu";
-import { Box, Button, Flex, Input, Text } from "@chakra-ui/react";
-import { FiMenu } from "react-icons/fi";
-import { useColorMode, useColorModeValue } from "../ui/color-mode";
-import { useLogout } from "@/utils/auth";
 import useAuthStore from "@/stores/useAuthStore";
-import { useEffect } from "react";
+import { Box, Flex } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { useColorModeValue } from "../ui/color-mode";
+import ChatWindow from "../containers/ChatWindow";
+import Conversations from "../containers/Conversations";
 
 const Home = () => {
 
   const navigate = useNavigate();
-  const { colorMode, toggleColorMode } = useColorMode();
-  const handleLogout = useLogout();
   const { accessToken } = useAuthStore.getState();
- 
+
   useEffect(() => {
     if (!accessToken) {
-      console.log("Access denied")
+      console.log("Access denied");
       navigate("/auth/login");
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [accessToken])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accessToken]);
+
+
+  const recipient = {
+    id: "sample",
+    username: "jcaibog",
+    avatarUrl: "",
+    firstname: "Jerson",
+    lastname: "Caibog",
+  }
+
+  const activeStatus = "Active now";
+  const [selectedChat, setSelectedChat] = useState<string>() // user id
+
+  useEffect(() => {
+    setSelectedChat("sample")
+  }, [])
 
   return (
-    <Box bg={useColorModeValue("gray.200", "gray.950")} width={"100vw"} height={"100vh"} overflow={"hidden"} >
-
+    <Box
+      bg={useColorModeValue("gray.200", "gray.950")}
+      width={"100vw"}
+      height={"100vh"}
+      overflow={"hidden"}
+    >
       <Flex
         direction={"row"}
         maxW={"1200px"}
@@ -42,328 +53,11 @@ const Home = () => {
         padding={"4"}
         gap={"4"}
       >
+        
+        <Conversations selectedChat={selectedChat} />
 
-        {/* Chats */}
-        <Box
-          padding={"0"}
-        >
-          <Flex
-            direction={"column"}
-            display={"none"}
-            minW={"0px"}
-            height={"100%"}
-            bg={useColorModeValue("white", "gray.900")}
-            borderRadius={"lg"}
-            padding={"4"}
-            paddingBlock={"1"}
-            md={{ 
-              display: "flex",
-              minW: "220px",
-              maxW: "220px", 
-            }}
-            lg={{ 
-              display: "flex",
-              minW: "200px",
-              maxW: "400px", 
+        <ChatWindow recipient={recipient} activeStatus={activeStatus} />
 
-            }}
-          >
-            <Flex direction={"row"} align={"center"} gap={"10px"} transform={"translateX(-2px)"} >
-              <MenuRoot >
-                <MenuTrigger asChild>
-                  <Button variant={"ghost"} size="md" padding={0} h={"30px"} minWidth={"30px"} >
-                    <FiMenu />
-                  </Button>
-                </MenuTrigger>
-                <MenuContent>
-                  <MenuItem onClick={toggleColorMode} padding={4} cursor={"pointer"} value="dark-mode">Dark Mode: {colorMode === 'dark' ? 'On' : 'Off'}</MenuItem>
-                  <MenuItem padding={4} cursor={"pointer"} value="my-account">My Account</MenuItem>
-                  <MenuItem onClick={handleLogout} padding={4} cursor={"pointer"} borderTop={"1px solid"} borderColor={useColorModeValue("gray.300", "gray.800")} value="log-out">
-                    Log out
-                  </MenuItem>
-                </MenuContent>
-              </MenuRoot>
-              <Text
-                fontSize={"lg"}
-                display={"none"}
-                fontWeight={"semibold"}
-                marginBottom={"10px"}
-                marginTop={"10px"}
-                md={{
-                  display: "flex"
-                }}
-              >
-                Chats
-              </Text>
-            </Flex>
-
-            <Flex 
-              direction={"column"}
-              gap={"3"}
-              sm={{
-                gap: "0"
-              }}
-            >
-              <Flex
-                cursor={"pointer"}
-                background={"transparent"}
-                fontSize={"14px"}
-                sm={{ 
-                  gap: "3", 
-                  padding: "3",
-                  paddingInline: "0",
-                }}
-              >
-                <Avatar name="Jinky Suson" src="" ></Avatar>
-
-                <Flex
-                  direction={"column"}
-                  textWrap={"nowrap"}
-                  width={"0"}
-                  md={{ minWidth: "130px" }}
-                  lg={{ minWidth: "200px",  }}
-                >
-                  <Text 
-                    display={"none"}
-                    md={{ display: "flex" }}
-                  >User 1</Text>
-                  <Text 
-                    opacity={"50%"} 
-                    textOverflow={"ellipsis"}
-                    fontSize={"xs"}
-                    overflow={"hidden"}
-                    display={"none"}
-                    md={{ display: "block" }}
-                  >
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo
-                    et fugit praesentium aspernatur ex quia, rerum neque fugiat
-                    nisi quos ab repellendus laudantium iusto necessitatibus,
-                    cupiditate quae. Accusantium, nemo minus?
-                  </Text>
-                </Flex>
-              </Flex>
-          
-            </Flex>
-          </Flex>
-        </Box>
-
-        {/* Main */}
-        <Flex
-          width={"100%"}
-          height={"100%"}
-          direction={"column"}
-          padding={"0"}
-        >
-          {/* Header */}
-          <Flex
-            direction={"column"}
-            height={"100%"}
-            bg={useColorModeValue("white", "gray.900")}
-            borderRadius={"lg"}
-          >
-            <Flex width={"full"} direction={"column"} alignItems={"center"}>
-              <Flex
-                width={"full"}
-                direction={"row"}
-                align={"center"}
-                padding={"4"}
-                paddingBlock={"3"}
-              >
-                <Flex direction={"row"} gap={"10px"} width={"full"} >
-                  <Avatar name="Jinky Suson" src="" ></Avatar>
-                  <Flex direction={"column"}>
-                    <Text fontWeight={"semibold"} fontSize={"md"} color={"fg"}>
-                      Jinky Suson
-                    </Text>
-                    <Text fontSize={"xs"} fontWeight={"300"} opacity={"70%"}>
-                      Active now
-                    </Text>
-                  </Flex>
-                </Flex>
-                {/* <ColorModeButton _icon={{ w: "16px" }} /> */}
-              </Flex>
-            </Flex>
-
-            {/* Chat box */}
-            <Flex
-              direction={"column"}
-              flex={"1"}
-              gap={"10px"}
-              height={"full"}
-              width={"full"}
-              maxWidth={"1000px"}
-              padding={"4"}
-              overflowY={"scroll"}
-              // sx={{
-              //   '&::-webkit-scrollbar': {
-              //     width: '10px',
-              //   },
-              //   '&::-webkit-scrollbar-thumb': {
-              //     background: 'teal',
-              //     borderRadius: '5px',
-              //   },
-              //   '&::-webkit-scrollbar-thumb:hover': {
-              //     background: 'darkblue',
-              //   },
-              //   '&::-webkit-scrollbar-track': {
-              //     background: '#f1f1f1',
-              //   },
-              // }}
-              scrollbarWidth={"10px"}
-              scrollbarColor={"red"}
-              _scrollbarThumb={{ width: "5px" }}
-            >
-              <Flex 
-                padding={"2"}
-                width={"fit-content"}
-                maxWidth={"240px"}
-                borderRadius={"md"}
-                bg={useColorModeValue("gray.100", "gray.800")} 
-
-                sm={{ maxWidth: "360px" }}
-                md={{ maxWidth: "400px" }}
-                lg={{ maxWidth: "550px" }}
-              >
-                <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat ut ab nulla sapiente exercitationem obcaecati nemo accusantium quasi facilis non?</Text>
-              </Flex>
-
-              <Flex 
-                padding={"2"}
-                width={"fit-content"}
-                maxWidth={"240px"}
-                borderRadius={"md"}
-                bg={useColorModeValue("gray.100", "gray.800")} 
-
-                sm={{ maxWidth: "360px" }}
-                md={{ maxWidth: "400px" }}
-                lg={{ maxWidth: "550px" }}
-              >
-                <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat ut ab nulla sapiente exercitationem obcaecati nemo accusantium quasi facilis non?</Text>
-              </Flex>
-
-              <Flex 
-                padding={"2"}
-                width={"fit-content"}
-                maxWidth={"240px"}
-                borderRadius={"md"}
-                marginLeft={"auto"}
-                bg={useColorModeValue("200", "gray.700")} 
-
-                sm={{ maxWidth: "360px" }}
-                md={{ maxWidth: "400px" }}
-                lg={{ maxWidth: "550px" }}
-              >
-                <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat ut ab nulla sapiente exercitationem obcaecati nemo accusantium quasi facilis non?</Text>
-              </Flex>
-
-              <Flex 
-                padding={"2"}
-                width={"fit-content"}
-                maxWidth={"240px"}
-                borderRadius={"md"}
-                bg={useColorModeValue("gray.100", "gray.800")} 
-
-                sm={{ maxWidth: "360px" }}
-                md={{ maxWidth: "400px" }}
-                lg={{ maxWidth: "550px" }}
-              >
-                <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat ut ab nulla sapiente exercitationem obcaecati nemo accusantium quasi facilis non?</Text>
-              </Flex>
-
-              <Flex 
-                padding={"2"}
-                width={"fit-content"}
-                maxWidth={"240px"}
-                borderRadius={"md"}
-                bg={useColorModeValue("gray.100", "gray.800")} 
-
-                sm={{ maxWidth: "360px" }}
-                md={{ maxWidth: "400px" }}
-                lg={{ maxWidth: "550px" }}
-              >
-                <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat ut ab nulla sapiente exercitationem obcaecati nemo accusantium quasi facilis non?</Text>
-              </Flex>
-
-              <Flex 
-                padding={"2"}
-                width={"fit-content"}
-                maxWidth={"240px"}
-                borderRadius={"md"}
-                marginLeft={"auto"}
-                bg={useColorModeValue("gray.200", "gray.700")} 
-
-                sm={{ maxWidth: "360px" }}
-                md={{ maxWidth: "400px" }}
-                lg={{ maxWidth: "550px" }}
-              >
-                <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat ut ab nulla sapiente exercitationem obcaecati nemo accusantium quasi facilis non?</Text>
-              </Flex>
-
-              <Flex 
-                padding={"2"}
-                width={"fit-content"}
-                maxWidth={"240px"}
-                borderRadius={"md"}
-                bg={useColorModeValue("gray.100", "gray.800")} 
-
-                sm={{ maxWidth: "360px" }}
-                md={{ maxWidth: "400px" }}
-                lg={{ maxWidth: "550px" }}
-              >
-                <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat ut ab nulla sapiente exercitationem obcaecati nemo accusantium quasi facilis non?</Text>
-              </Flex>
-
-              <Flex 
-                padding={"2"}
-                width={"fit-content"}
-                maxWidth={"240px"}
-                borderRadius={"md"}
-                bg={useColorModeValue("gray.100", "gray.800")} 
-
-                sm={{ maxWidth: "360px" }}
-                md={{ maxWidth: "400px" }}
-                lg={{ maxWidth: "550px" }}
-              >
-                <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat ut ab nulla sapiente exercitationem obcaecati nemo accusantium quasi facilis non?</Text>
-              </Flex>
-
-              <Flex 
-                padding={"2"}
-                width={"fit-content"}
-                maxWidth={"240px"}
-                borderRadius={"md"}
-                marginLeft={"auto"}
-                bg={useColorModeValue("gray.200", "gray.700")} 
-
-                sm={{ maxWidth: "360px" }}
-                md={{ maxWidth: "400px" }}
-                lg={{ maxWidth: "550px" }}
-              >
-                <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat ut ab nulla sapiente exercitationem obcaecati nemo accusantium quasi facilis non?</Text>
-              </Flex>
-            </Flex>
-
-            {/* Message box */}
-            <Flex width={"full"} justifyContent={"center"}>
-              <Flex
-                direction={"row"}
-                gap={"16px"}
-                maxWidth={"1000px"}
-                width={"full"}
-                padding={"4"}
-              >
-                <Input
-                  variant={"subtle"}
-                  placeholder="Aa"
-                  bg={{ base: "gray.200", _dark: "gray.800" }}
-                  outline={"none"}
-                  border={"0"}
-                />
-                <Button >Send</Button>
-              </Flex>
-            </Flex>
-          </Flex>
-        </Flex>
       </Flex>
     </Box>
   );
