@@ -9,7 +9,7 @@ import Conversations from "../containers/Conversations";
 const Home = () => {
 
   const navigate = useNavigate();
-  const { accessToken } = useAuthStore.getState();
+  const { accessToken, userId } = useAuthStore.getState();
 
   useEffect(() => {
     if (!accessToken) {
@@ -18,7 +18,6 @@ const Home = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken]);
-
 
   const recipient = {
     id: "sample",

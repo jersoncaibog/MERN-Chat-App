@@ -31,6 +31,7 @@ api.interceptors.response.use(
     async (error) => { // Error
         if (error.response?.status === 401) {
             const newAccessToken = await refreshAccessToken();
+            
             if (newAccessToken) {
                 // Retry the original request with the new access token
                 error.config.headers['Authorization'] = `Bearer ${newAccessToken}`;

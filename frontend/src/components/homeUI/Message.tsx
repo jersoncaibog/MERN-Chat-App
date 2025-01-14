@@ -13,6 +13,8 @@ interface Message {
 
 const Message = ({ isRecieverMessage = false, data, activeMessage, setActiveMessage } : Message) => {
 
+    // TODO: isRecieverMessage logic in messages
+
     const [isMobile, setIsMobile] = useState(window.innerWidth < 748)
 
     useEffect(() => {

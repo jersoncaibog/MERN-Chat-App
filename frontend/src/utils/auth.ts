@@ -6,10 +6,13 @@ export const refreshAccessToken = async () => {
   try {
     console.log('Refreshing access token')
     const response = await api.post('/auth/refresh-token');
-    const newAccessToken = response.data.accessToken;
+    const { newAccessToken, user } = response.data
+
     useAuthStore.getState().setAccessToken(newAccessToken);
-    console.log(response)
+    useAuthStore.getState().setUserId(user.id);
+
     return newAccessToken;
+
   } catch (error) {
     console.error('Error refreshing access token:', error);
     useAuthStore.getState().clearAccessToken();
