@@ -28,7 +28,7 @@ function App() {
     };
 
     initializeAuth();
-  }, [navigate]);
+  }, []);
 
   return (
     <Box minH={"100vh"}>

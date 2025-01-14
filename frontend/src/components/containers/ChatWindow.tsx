@@ -4,10 +4,11 @@ import Message from "../homeUI/Message";
 import { useColorModeValue } from "../ui/color-mode";
 import MessageInput from "../homeUI/MessageInput";
 import { MessageData, User } from "@/types";
+import { useState } from "react";
 
 interface ChatWindow {
   recipient: User;
-  activeStatus: string; 
+  activeStatus: string;
 }
 
 const mockMessages: Array<MessageData> = [
@@ -15,14 +16,36 @@ const mockMessages: Array<MessageData> = [
     id: "1",
     sender: "User1",
     chatRoom: "room1",
-    sentAt: 1624901765743,
-    content: "Hello, how are you?"
-  }
+    sentAt: "10:00 AM",
+    content: "Message 1"
+  },
+  { 
+    id: "2",
+    sender: "User1",
+    chatRoom: "room1",
+    sentAt: "10:00 AM",
+    content: "Message 2"
+  },
+  { 
+    id: "3",
+    sender: "User1",
+    chatRoom: "room1",
+    sentAt: "10:00 AM",
+    content: "Message 3"
+  },
+  {
+    id: "4",
+    sender: "User1",
+    chatRoom: "room1",
+    sentAt: "10:00 AM",
+    content: "Message 4"
+  },
 ]
 
 const ChatWindow = ({ recipient, activeStatus } : ChatWindow) => {
   
   const { firstname, lastname } = recipient;
+  const [ activeMessage, setActiveMessage ] = useState<string | null>() // message id
  
   return (
     <Flex width={"100%"} height={"100%"} direction={"column"} padding={"0"}>
@@ -58,7 +81,7 @@ const ChatWindow = ({ recipient, activeStatus } : ChatWindow) => {
 
         {/* Chat box */}
         <Flex
-          direction={"column"}
+          direction={"column-reverse"}
           flex={"1"}
           gap={"10px"}
           height={"full"}
@@ -72,7 +95,12 @@ const ChatWindow = ({ recipient, activeStatus } : ChatWindow) => {
         >
           
           {mockMessages.map((data) =>
-            <Message data={data} />
+            <Message 
+              activeMessage={activeMessage} 
+              setActiveMessage={setActiveMessage} 
+              data={data} 
+              key={data.id} 
+            />
           )}
           
         </Flex>

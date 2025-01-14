@@ -1,17 +1,14 @@
-import axios from 'axios';
 import useAuthStore from '../stores/useAuthStore';
 import api from './api';
 import { useNavigate } from 'react-router';
 
 export const refreshAccessToken = async () => {
   try {
-    const response = await axios.post('/api/auth/refresh-token');
-
-    console.log(response)
-
+    console.log('Refreshing access token')
+    const response = await api.post('/auth/refresh-token');
     const newAccessToken = response.data.accessToken;
-
     useAuthStore.getState().setAccessToken(newAccessToken);
+    console.log(response)
     return newAccessToken;
   } catch (error) {
     console.error('Error refreshing access token:', error);

@@ -9,21 +9,21 @@ import { Box, Button, Flex, Text } from "@chakra-ui/react";
 import { FiMenu } from "react-icons/fi";
 import { useColorMode, useColorModeValue } from "../ui/color-mode";
 import Conversation from "../homeUI/Conversation";
-import { Conversation as ConversationProps } from "@/types";
+import { ConversationData } from "@/types";
 import useAuthStore from "@/stores/useAuthStore";
 
 interface Conversations {
-    selectedChat: string | undefined; // conversation id
+    selectedChat: string | null; // conversation id
+    setSelectedChat: React.Dispatch<React.SetStateAction<string | null>>
 }
 
-
-const Conversations = ({ selectedChat } : Conversations) => {
+const Conversations = ({ selectedChat = null , setSelectedChat } : Conversations) => {
     
     const auth = useAuthStore()
 
     console.log(auth)
     
-    const mockConversations: Array<ConversationProps> = [
+    const mockConversations: Array<ConversationData> = [
         { id: "1", members: ["a", "b"] },
         { id: "2", members: ["jerson", "jinky"] },
         { id: "3", members: ["1", "2"] }
@@ -113,7 +113,12 @@ const Conversations = ({ selectedChat } : Conversations) => {
                 </Flex>
 
                 {mockConversations.map((conversation) =>
-                    <Conversation isSelected={conversation.id === "1"} members={conversation.members} />
+                    <Conversation
+                        id={conversation.id}
+                        members={conversation.members} 
+                        selectedChat={selectedChat}
+                        setSelectedChat={setSelectedChat} 
+                    />
                 )}
 
             </Flex>

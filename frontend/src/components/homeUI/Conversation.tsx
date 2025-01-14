@@ -4,8 +4,9 @@ import { useColorModeValue } from "../ui/color-mode";
 import { Conversation as ConversationProps } from "@/types";
 import { useEffect } from "react";
 
-const Conversation = ({ id, members, isSelected = false } : ConversationProps ) => {
+const Conversation = ({ selectedChat, setSelectedChat, id, members} : ConversationProps ) => {
 
+    const isSelected = selectedChat === id
     const isSelectedBg = useColorModeValue("gray.100", "gray.800")
 
     useEffect(() => {
@@ -20,6 +21,9 @@ const Conversation = ({ id, members, isSelected = false } : ConversationProps ) 
             gap={"3"}
             sm={{
                 gap: "0",
+            }}
+            onClick={() => {
+                setSelectedChat(id);
             }}
 
         >

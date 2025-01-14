@@ -29,7 +29,7 @@ const Home = () => {
   }
 
   const activeStatus = "Active now";
-  const [selectedChat, setSelectedChat] = useState<string>() // user id
+  const [selectedChat, setSelectedChat] = useState<string | null>(null) // user id
 
   useEffect(() => {
     setSelectedChat("sample")
@@ -54,7 +54,7 @@ const Home = () => {
         gap={"4"}
       >
         
-        <Conversations selectedChat={selectedChat} />
+        <Conversations selectedChat={selectedChat} setSelectedChat={setSelectedChat} />
 
         <ChatWindow recipient={recipient} activeStatus={activeStatus} />
 

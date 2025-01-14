@@ -160,7 +160,7 @@ export const refreshAccessToken = (req, res) => {
     const user = decoded; // Get user data
     console.log(user)
     const newAccessToken = createAccessToken(user);
-    res.status(200).json({ accessToken: newAccessToken });
+    res.status(200).json({ accessToken: newAccessToken, user });
   } catch (err) {
     return res.status(403).json({ success: false, message: 'Invalid or expired refresh token' });
   }
@@ -172,5 +172,6 @@ export const logoutUser = (req, res) => {
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'Strict',
     });
-    res.status(200).json({ success: true, message: 'Logged out successfully' });
+
+    res.status(200).json({ success: true, message: 'Logged out successfully :>' });
 };
