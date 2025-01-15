@@ -3,6 +3,7 @@ import { useColorModeValue } from '../ui/color-mode'
 import { useEffect, useState } from 'react'
 import { MessageData } from '@/types'
 import { Tooltip } from '../ui/tooltip'
+import useAuthStore from '@/stores/useAuthStore'
 
 interface Message {
     data: MessageData,
@@ -12,8 +13,6 @@ interface Message {
 }
 
 const Message = ({ isRecieverMessage = false, data, activeMessage, setActiveMessage } : Message) => {
-
-    // TODO: isRecieverMessage logic in messages
 
     const [isMobile, setIsMobile] = useState(window.innerWidth < 748)
 
@@ -30,11 +29,24 @@ const Message = ({ isRecieverMessage = false, data, activeMessage, setActiveMess
         if (!isMobile) setActiveMessage(null) 
     }, [isMobile])
 
+    //
 
     const receiverBg = useColorModeValue("gray.100", "gray.800");
     const senderBg = useColorModeValue("gray.200", "gray.700");
     const activeMsgBg = useColorModeValue("gray.200", "white")
     const activeMsgColor = useColorModeValue("gray.800", "black")
+
+
+    //
+
+    const auth = useAuthStore()
+    
+    const isReciever = auth.userId
+
+    useEffect(() => {
+        console.log(isReciever)
+    }, [isReciever])
+
 
     return (
         <Flex

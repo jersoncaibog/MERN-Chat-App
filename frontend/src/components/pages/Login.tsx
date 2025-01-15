@@ -1,5 +1,5 @@
 import { Button, Link as ChakraLink, Fieldset, Flex, Group, Heading, Input, Stack, Text } from "@chakra-ui/react"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Link } from "react-router"
 import { ColorModeButton, useColorModeValue } from "../ui/color-mode"
 import { Field } from "../ui/field"
@@ -14,17 +14,7 @@ import {
 const Login = () => {
 
   const navigate = useNavigate();
-  const { accessToken } = useAuthStore()
   const setAccessToken = useAuthStore((state) => state.setAccessToken)
-
-  useEffect(() => {
-    console.log(accessToken)
-    if (accessToken) {
-      console.log("Login user")
-      navigate("/");
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [accessToken])
 
   const [ usernameError, setUsernameError ] = useState<string | undefined >()
   const [ passwordError, setPasswordError ] = useState<string | undefined >()

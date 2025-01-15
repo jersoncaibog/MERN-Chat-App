@@ -21,7 +21,6 @@ api.interceptors.request.use(
     }
 );
 
-
 // Handle token refresh in case of 401 (Unauthorized) errors
 api.interceptors.response.use(
     (response) => { // Successful response

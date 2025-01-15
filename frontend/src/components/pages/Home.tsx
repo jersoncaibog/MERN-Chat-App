@@ -9,7 +9,7 @@ import Conversations from "../containers/Conversations";
 const Home = () => {
 
   const navigate = useNavigate();
-  const { accessToken, userId } = useAuthStore.getState();
+  const { accessToken } = useAuthStore.getState();
 
   useEffect(() => {
     if (!accessToken) {

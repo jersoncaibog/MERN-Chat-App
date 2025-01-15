@@ -3,19 +3,25 @@ import api from './api';
 import { useNavigate } from 'react-router';
 
 export const refreshAccessToken = async () => {
+  
+  const auth = useAuthStore.getState()
+  
   try {
     console.log('Refreshing access token')
     const response = await api.post('/auth/refresh-token');
     const { newAccessToken, user } = response.data
 
-    useAuthStore.getState().setAccessToken(newAccessToken);
-    useAuthStore.getState().setUserId(user.id);
+
+    auth.setAccessToken(newAccessToken);
+    auth.setUserId(user.id);
+
+    // console.log(auth.accessToken)
 
     return newAccessToken;
 
   } catch (error) {
     console.error('Error refreshing access token:', error);
-    useAuthStore.getState().clearAccessToken();
+    auth.clearAccessToken();
     return null;
   }
 };
