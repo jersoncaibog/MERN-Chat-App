@@ -9,15 +9,11 @@ export const refreshAccessToken = async () => {
   try {
     console.log('Refreshing access token')
     const response = await api.post('/auth/refresh-token');
-    const { newAccessToken, user } = response.data
 
+    auth.setAccessToken(response.data.accessToken);
+    auth.setUserId(response.data.user.id);
 
-    auth.setAccessToken(newAccessToken);
-    auth.setUserId(user.id);
-
-    // console.log(auth.accessToken)
-
-    return newAccessToken;
+    return response.data.accessToken;
 
   } catch (error) {
     console.error('Error refreshing access token:', error);

@@ -5,19 +5,30 @@ import { useNavigate } from "react-router";
 import { useColorModeValue } from "../ui/color-mode";
 import ChatWindow from "../containers/ChatWindow";
 import Conversations from "../containers/Conversations";
+import { refreshAccessToken } from "@/utils/auth";
 
 const Home = () => {
 
-  const navigate = useNavigate();
-  const { accessToken } = useAuthStore.getState();
+  const accessToken = useAuthStore(state => state.accessToken);
+  const navigate = useNavigate()
+
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    if (!accessToken) {
-      console.log("Access denied");
-      navigate("/auth/login");
+    const initAuth = async () => {
+
+      
+      const res = await refreshAccessToken()
+
+      console.log(res)
+      
+      if (!res) {
+        navigate("/auth/login")
+      }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [accessToken]);
+
+    initAuth();
+  }, [accessToken, navigate])
 
   const recipient = {
     id: "sample",
@@ -33,6 +44,7 @@ const Home = () => {
   useEffect(() => {
     setSelectedChat("sample")
   }, [])
+  
 
   return (
     <Box
@@ -41,23 +53,30 @@ const Home = () => {
       height={"100vh"}
       overflow={"hidden"}
     >
-      <Flex
-        direction={"row"}
-        maxW={"1200px"}
-        width={"100%"}
-        minH={"100vh"}
-        maxH={"100vh"}
-        height={"100vh"}
-        margin={"0 auto"}
-        padding={"4"}
-        gap={"4"}
-      >
-        
-        <Conversations selectedChat={selectedChat} setSelectedChat={setSelectedChat} />
 
-        <ChatWindow recipient={recipient} activeStatus={activeStatus} />
+      {loading ? (
+        <>Loading</>
+      ) : (
+        <>
+          <Flex
+            direction={"row"}
+            maxW={"1200px"}
+            width={"100%"}
+            minH={"100vh"}
+            maxH={"100vh"}
+            height={"100vh"}
+            margin={"0 auto"}
+            padding={"4"}
+            gap={"4"}
+          >
+            
+            <Conversations selectedChat={selectedChat} setSelectedChat={setSelectedChat} />
 
-      </Flex>
+            <ChatWindow recipient={recipient} activeStatus={activeStatus} />
+
+          </Flex>
+        </>
+      )}
     </Box>
   );
 };

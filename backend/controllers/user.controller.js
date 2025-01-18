@@ -151,19 +151,22 @@ export const deleteUser = async (req, res) => {
 export const refreshAccessToken = (req, res) => {
     const { refreshToken } = req.cookies;
 
-  if (!refreshToken) {
-    return res.status(401).json({ message: 'Refresh token missing' });
-  }
+    if (!refreshToken) {
+        return res.status(401).json({ message: 'Refresh token missing' });
+    }
 
-  try {
-    const decoded = verifyRefreshToken(refreshToken);
-    const user = decoded; // Get user data
-    console.log(user)
-    const newAccessToken = createAccessToken(user);
-    res.status(200).json({ accessToken: newAccessToken, user });
-  } catch (err) {
-    return res.status(403).json({ success: false, message: 'Invalid or expired refresh token' });
-  }
+    try {
+        const user = verifyRefreshToken(refreshToken);
+
+        console.log(user)
+
+        const newAccessToken = createAccessToken(user);
+        
+        res.status(200).json({ accessToken: newAccessToken, user });
+
+    } catch (err) {
+        return res.status(403).json({ success: false, message: 'Invalid or expired refresh token' });
+    }
 };
 
 export const logoutUser = (req, res) => {
