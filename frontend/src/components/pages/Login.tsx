@@ -110,7 +110,7 @@ const Login = () => {
               width={"full"}
             >
                 <Stack direction={"row"} align={"center"} justifyContent={"space-between"} >
-                  <Heading textAlign={"center"} size={"2xl"} fontWeight={"extrabold"} >PotatoChat🥔</Heading>
+                  <Heading textAlign={"center"} size={"2xl"} _selection={{ bg: useColorModeValue("gray.400", "gray.500") }} fontWeight={"extrabold"} >PotatoChat🥔</Heading>
                   <ColorModeButton 
                     _icon={{ width: "18px" }}
                     _hover={{
@@ -122,11 +122,11 @@ const Login = () => {
 
                 <Fieldset.Content>
                   <Field invalid={usernameError !== undefined} errorText={usernameError} >
-                    <Input autoComplete="off" name="username" p={"6"} mt={6} placeholder="Username" />
+                    <Input autoComplete="off" _selection={{ bg: useColorModeValue("gray.400", "gray.500") }} name="username" p={"6"} mt={6} placeholder="Username" />
                   </Field>
                   
                   <Field invalid={passwordError !== undefined} errorText={passwordError} >
-                    <PasswordInput autoComplete="off" name="password" p={"6"} mt={1} placeholder="Password"  />
+                    <PasswordInput autoComplete="off" _selection={{ bg: useColorModeValue("gray.400", "gray.500") }} name="password" p={"6"} mt={1} placeholder="Password"  />
                   </Field>
         
                   {/* <Checkbox mt={2} >Keep me logged in</Checkbox> */}

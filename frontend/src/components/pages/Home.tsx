@@ -17,7 +17,7 @@ const Home = () => {
   useEffect(() => {
     const initAuth = async () => {
 
-      
+      setLoading(true)
       const res = await refreshAccessToken()
 
       console.log(res)
@@ -25,6 +25,8 @@ const Home = () => {
       if (!res) {
         navigate("/auth/login")
       }
+
+      setLoading(false)
     }
 
     initAuth();
