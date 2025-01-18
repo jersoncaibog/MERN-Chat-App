@@ -134,7 +134,7 @@ const Register = () => {
               w={"full"} 
             >
                 <Stack direction={"row"} align={"center"} justifyContent={"space-between"} >
-                  <Heading textAlign={"center"} size={"2xl"} fontWeight={"extrabold"} >PotatoChat🥔</Heading>
+                  <Heading _selection={{ bg: useColorModeValue("gray.400", "gray.500") }} textAlign={"center"} size={"2xl"} fontWeight={"extrabold"} >PotatoChat🥔</Heading>
                   <ColorModeButton 
                     _icon={{ width: "18px" }}
                     _hover={{
@@ -146,23 +146,23 @@ const Register = () => {
                 
                 <Fieldset.Content>
                   <Field  invalid={usernameError !== undefined} errorText={usernameError} >
-                    <Input autoComplete="off" name="username" p={"6"} mt={6} placeholder="Username" />
+                    <Input _selection={{ bg: useColorModeValue("gray.400", "gray.500") }} autoComplete="off" name="username" p={"6"} mt={6} placeholder="Username" />
                   </Field>
                   
                   <Field invalid={firstnameError !== undefined} errorText={firstnameError} >
-                    <Input autoComplete="off" name="firstname" p={"6"} mt={1} placeholder="First name"  />
+                    <Input _selection={{ bg: useColorModeValue("gray.400", "gray.500") }} autoComplete="off" name="firstname" p={"6"} mt={1} placeholder="First name"  />
                   </Field>
 
                   <Field invalid={lastnameError !== undefined} errorText={lastnameError} >
-                    <Input autoComplete="off" name="lastname" p={"6"} mt={1} placeholder="Last name"  />
+                    <Input _selection={{ bg: useColorModeValue("gray.400", "gray.500") }} autoComplete="off" name="lastname" p={"6"} mt={1} placeholder="Last name"  />
                   </Field>
 
                   <Field invalid={passwordError !== undefined} errorText={passwordError} helperText={"Password must be atleast 8 characters long"} >
-                    <PasswordInput name="password" p={"6"} mt={1} placeholder="Password" />
+                    <PasswordInput _selection={{ bg: useColorModeValue("gray.400", "gray.500") }} name="password" p={"6"} mt={1} placeholder="Password" />
                   </Field>
                   
                   <Field invalid={confirmPasswordError !== undefined} errorText={confirmPasswordError} >
-                    <PasswordInput name="confirmPassword" p={"6"} mt={1} placeholder="Confirm Password"  />
+                    <PasswordInput _selection={{ bg: useColorModeValue("gray.400", "gray.500") }} name="confirmPassword" p={"6"} mt={1} placeholder="Confirm Password"  />
                   </Field>
                 </Fieldset.Content>
 
