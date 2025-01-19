@@ -14,8 +14,8 @@ export const createChatRoom = async (req, res) => {
         await newChatRoom.save();
         console.log('New chatroom created')
         res.status(201).json({ success: true, data: newChatRoom });
-    } catch (err) {
-        console.error('Server error while creating chatRoom', err);
+    } catch (error) {
+        console.error('Server error while creating chatRoom', error);
         res.status(500).json({ success: false, message: 'Server error while creating chatroom' });
     }
 }
@@ -32,8 +32,8 @@ export const fetchChatRoom = async (req, res) => {
         }
         
         res.status(200).json({ success: true, data: chatRoom });  // Success response
-    } catch (err) {
-        console.error('Server error while getting chatRoom:', err);
+    } catch (error) {
+        console.error('Server error while getting chatRoom:', error);
         res.status(500).json({ success: false, message: 'Server error' });  // Error response
     }
 }
@@ -57,7 +57,7 @@ export const updateChatRoom = async (req, res) => {
         
         res.status(200).json({ success: true, data: updatedChatroom });  // Success response
     } catch (error) {
-        console.error('Server error while updating chatRoom', err);
+        console.error('Server error while updating chatRoom', error);
         res.status(500).json({ success: false, message: 'Server error' });
     }
 }
@@ -74,13 +74,13 @@ export const deleteChatRoom = async (req, res) => {
         const chatRoom = await ChatRoom.findByIdAndDelete(id);
         
         if (!chatRoom) {
-            console.error('Chatroom not found: ', err);
+            console.error('Chatroom not found');
             return res.status(404).json({ success: false, message: 'Chatroom not found' });  // If chatRoom not found
         }
         
         res.status(200).json({ success: true, message: 'Chatroom deleted successfully' });  // Success response
-    } catch (err) {
-        console.error('Server error while deleting chatRoom:', err);
+    } catch (error) {
+        console.error('Server error while deleting chatRoom:', error);
         res.status(500).json({ success: false, message: 'Server error' });  // Error response
     }
 }

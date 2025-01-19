@@ -115,9 +115,10 @@ const Conversations = ({ selectedChat = null , setSelectedChat } : Conversations
                 {mockConversations.map((conversation) =>
                     <Conversation
                         id={conversation.id}
+                        key={conversation.id}
                         members={conversation.members} 
                         selectedChat={selectedChat}
-                        setSelectedChat={setSelectedChat} 
+                        setSelectedChat={setSelectedChat}
                     />
                 )}
 

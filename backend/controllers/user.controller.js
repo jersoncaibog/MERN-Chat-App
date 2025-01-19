@@ -73,7 +73,7 @@ export const loginUser = async (req, res) => {
         });
         
         console.log(user)
-        res.status(201).json({ success: true, message: 'Login successful', accessToken, data: user });
+        res.status(200).json({ success: true, message: 'Login successful', accessToken, data: user });
 
     } catch (error) {
         console.error("Server error while signing in: ", error)
@@ -96,7 +96,7 @@ export const fetchUser = async (req, res) => {
             return res.status(404).json({ success: false, message: "User not found" });
         }
     
-        res.status(201).json({ success: true, message: 'User fetched successfully', data: fetchedUser });
+        res.status(200).json({ success: true, message: 'User fetched successfully', data: fetchedUser });
     } catch (error) {
         console.error("Server error while fetching user: ", error)
         res.status(500).json({ success: false, message: "server error" });
@@ -114,7 +114,7 @@ export const updateUser = async (req, res) => {
     try {
         const updatedUser = await User.findByIdAndUpdate(id, newUserData, { new: true });
 
-        if (!updateUser) {
+        if (!updatedUser) {
             console.error('User not found');
             return res.status(404).json({ success: false, message: "User not found" });
         }
@@ -169,7 +169,7 @@ export const refreshAccessToken = (req, res) => {
     }
 };
 
-export const logoutUser = (req, res) => {
+export const logoutUser = async (req, res) => {
     res.clearCookie('refreshToken', {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',

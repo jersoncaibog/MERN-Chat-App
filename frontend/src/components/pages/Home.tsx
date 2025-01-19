@@ -43,11 +43,6 @@ const Home = () => {
   const activeStatus = "Active now";
   const [selectedChat, setSelectedChat] = useState<string | null>(null) // user id
 
-  useEffect(() => {
-    setSelectedChat("sample")
-  }, [])
-  
-
   return (
     <Box
       bg={useColorModeValue("gray.200", "gray.950")}
